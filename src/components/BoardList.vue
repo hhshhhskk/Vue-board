@@ -69,12 +69,7 @@ export default {
       let listLeng = this.items.length,
         listSize = this.pageSize,
         page = Math.ceil(listLeng / listSize);
-      // if (listLeng % listSize > 0) page += 1;
 
-      /*
-      아니면 page = Math.floor((listLeng - 1) / listSize) + 1;
-      이런식으로 if 문 없이 고칠 수도 있다!
-      */
       return page;
     },
     paginatedItems: function () {
@@ -92,5 +87,6 @@ export default {
 }
 .btn-cover {
   text-align: center;
+  margin-top: 30px;
 }
 </style>
