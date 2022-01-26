@@ -11,21 +11,39 @@
       </router-link>
 
       <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      <form @submit.prevent="searchBtn">
+        <input class="input" type="text" v-model="searchData" />
+        <v-btn icon type="submit">
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+      </form>
     </v-toolbar>
   </div>
 </template>
 
 <script>
-export default {};
+import EventBus from "@/utils/EventBus";
+
+export default {
+  data() {
+    return {
+      searchData: "",
+    };
+  },
+  methods: {
+    searchBtn() {
+      EventBus.$emit("searchData", this.searchData);
+    },
+  },
+};
 </script>
 
 <style scope>
 .main {
   text-decoration: none;
   color: white;
+}
+.input {
+  background: white;
 }
 </style>

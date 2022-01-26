@@ -16,21 +16,15 @@
         </v-list-item>
         <v-divider :key="index" :inset="item.inset"></v-divider>
       </template>
-      <div class="btn-cover">
-        <button :disabled="pageNum === 0" @click="prevPage" class="page-btn">
-          <i class="fas fa-arrow-left"></i>
-        </button>
-        &nbsp;
-        <span class="page-count">{{ pageNum + 1 }} / {{ pageCount }} </span>
-        &nbsp;
-        <button
-          :disabled="pageNum >= pageCount - 1"
-          @click="nextPage"
-          class="page-btn"
-        >
-          <i class="fas fa-arrow-right"></i>
-        </button>
-      </div>
+      <template>
+        <div class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="pageCount"
+            circle
+          ></v-pagination>
+        </div>
+      </template>
       <router-link style="text-decoration: none" to="Create">
         <v-btn class="mx-2" fab dark color="indigo">
           <v-icon dark> mdi-plus </v-icon>
@@ -42,38 +36,40 @@
 
 <script>
 import { fetchBoardList } from "@/api/index";
+import EventBus from "@/utils/EventBus";
 
 export default {
   data() {
     return {
       items: [],
-      pageNum: 0,
+      page: 1,
       pageSize: 5,
+      search: "",
+      searchedData: [],
     };
   },
   created() {
     fetchBoardList()
       .then((response) => (this.items = response.data))
       .catch((error) => console.log(error));
+
+    EventBus.$on("searchData", (res) => {
+      this.search = res;
+    });
   },
-  methods: {
-    nextPage() {
-      this.pageNum += 1;
-    },
-    prevPage() {
-      this.pageNum -= 1;
-    },
-  },
+  methods: {},
   computed: {
+    rows() {
+      return this.items.length;
+    },
     pageCount() {
       let listLeng = this.items.length,
         listSize = this.pageSize,
-        page = Math.ceil(listLeng / listSize);
-
-      return page;
+        totalpage = Math.ceil(listLeng / listSize);
+      return totalpage;
     },
     paginatedItems: function () {
-      const start = this.pageNum * this.pageSize,
+      const start = (this.page - 1) * this.pageSize,
         end = start + this.pageSize;
       return this.items.slice(start, end);
     },
@@ -84,9 +80,5 @@ export default {
 <style scope>
 .mx-2 {
   margin: 10px 0 0 93%;
-}
-.btn-cover {
-  text-align: center;
-  margin-top: 30px;
 }
 </style>

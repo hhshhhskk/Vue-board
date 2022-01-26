@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:3000/memo/";
+const baseURL = "http://localhost:3000/memo";
 
 // 게시판 리스트 조회
 function fetchBoardList() {
-  return axios.get(baseURL);
+  return axios.get(`${baseURL}?_sort=id&_order=DESC`);
 }
 
 // 게시판 상세 페이지
