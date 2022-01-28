@@ -68,10 +68,19 @@ export default {
         totalpage = Math.ceil(listLeng / listSize);
       return totalpage;
     },
+
     paginatedItems: function () {
       const start = (this.page - 1) * this.pageSize,
         end = start + this.pageSize;
-      return this.items.slice(start, end);
+      if (this.search) {
+        return this.items
+          .filter((data) => {
+            return data.title.toLowerCase().includes(this.search.toLowerCase());
+          })
+          .slice(start, end);
+      } else {
+        return this.items.slice(start, end);
+      }
     },
   },
 };
